@@ -26,3 +26,30 @@ f28829c - Lighthouse "77,100,96,100" (Perf,Access,BP,SEO)
 - Accessibilité : 96 → 100 (+4), color-contrast OK
 - WAVE : 0 Errors, 0 Contrast Errors
 - Reste : unsized-images, errors-in-console (favicon 404)
+
+### Fix 3 — Dimensions images explicites + height:auto
+905d34c - Lighthouse "70,100,96,100" (Perf,Access,BP,SEO)
+- Ajout width/height sur slider (1440x666), nina (560x558), camera (560x559), instagram (40x40)
+- Ajout height:auto en CSS sur .carousel-item img, .picture img, .social-link img
+- Fix </div> orphelin → </section> pour fermer gallery
+- unsized-images : 50 → 100, image-aspect-ratio : 0 → 100, image-size-responsive : 0 → 100
+- Best Practices : 88 → 96 (+8)
+- Reste : errors-in-console (favicon 404), performance (LCP, FCP lents)
+
+### Fix 4 — Preload LCP, lazy load, favicon, fetchpriority
+f51f2e0 - Lighthouse "77,100,100,100" (Perf,Access,BP,SEO)
+- Preload première image slider (LCP element) via <link rel="preload">
+- fetchpriority="high" sur image LCP, loading="lazy" sur images below-the-fold
+- Favicon vide pour supprimer erreur 404 console
+- LCP : 6.6s → 5.0s, FCP : 2.7s
+- Best Practices : 96 → 100, errors-in-console OK
+- Reste : performance LCP encore à 5.0s (CSS render-blocking, fonts Google)
+
+### Fix 5 — Minification CSS et JS
+1f4f4a3 - Lighthouse "74,100,100,100" (Perf,Access,BP,SEO)
+- bootstrap.css 201K → 160K, style.css 5K → 4K (clean-css)
+- bootstrap.bundle.js 81K → 76K, maugallery.js 7K → 5K (terser)
+- Référencement des fichiers .min dans index.html
+- unminified-css : 0 → 100, unminified-javascript : 0 → 100
+- LCP : 5.0s → 4.7s
+- Reste : unused-css (Bootstrap ~153 KiB inutilisé), unused-js (jQuery ~59 KiB)
