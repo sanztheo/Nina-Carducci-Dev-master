@@ -2,3 +2,5 @@
 .DS_Store
 .vercel
 .env
+.playwright-mcp
+lighthouse-*.json
