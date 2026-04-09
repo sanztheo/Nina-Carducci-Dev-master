@@ -85,7 +85,43 @@ f51f2e0 - Lighthouse "77,100,100,100" (Perf,Access,BP,SEO)
 7. **Minification** — CSS et JS minifiés (bootstrap, style, maugallery, scripts)
 8. **Schema.org** — Données structurées LocalBusiness pour rich snippets
 
-#### Limites (non corrigées)
-- unused-css : Bootstrap complet (~153 KiB inutilisé) — purge risquée sans build tool
-- unused-js : jQuery (~59 KiB) — nécessaire pour mauGallery
-- LCP encore à 4.4s : dépend du poids CSS render-blocking (Bootstrap) et Google Fonts
+### Fix 7 — PurgeCSS Bootstrap + Self-host Google Fonts
+a2da4d1 - Lighthouse "99,100,100,100" (Perf,Access,BP,SEO)
+- PurgeCSS supprime les règles Bootstrap inutilisées : 160 KiB → 9.9 KiB
+- Self-host fonts Inter + Spectral en local (élimine 3 requêtes DNS externes)
+- Suppression preconnect googleapis + stylesheet externe
+- LCP : 4.4s → 2.0s, FCP : 2.6s → 0.9s, SI : 2.6s → 1.0s
+- Performance : 81 → 99 (+18)
+
+---
+
+### Résumé final (mis à jour)
+
+| Métrique | Baseline (38f67db) | Final (a2da4d1) | Gain |
+|---|---|---|---|
+| Performance | 67 | 99 | **+32** |
+| Accessibilité | 87 | 100 | **+13** |
+| Best Practices | 96 | 100 | **+4** |
+| SEO | 100 | 100 | = |
+| WAVE Errors | 4 | 0 | -4 |
+| WAVE Contrast | 3 | 0 | -3 |
+| WAVE Alerts | 7 | 0 | -7 |
+| LCP | 6.6s | 2.0s | **-4.6s** |
+| FCP | — | 0.9s | — |
+| TBT | — | 0ms | — |
+| CLS | — | 0.001 | — |
+
+#### Corrections apportées
+1. **Bug JS** — Navigation lightbox prev/next cassée (index au lieu de index±1)
+2. **Meta SEO** — title, description, Open Graph, lang="fr", charset en premier
+3. **HTML sémantique** — header/main/nav/section/footer, hiérarchie h1>h2>h3, labels form
+4. **Contraste** — Texte blanc sur #BEB45A → noir (ratio 2.12:1 → 13.3:1)
+5. **Images** — width/height explicites + height:auto CSS (CLS, aspect-ratio)
+6. **Performance** — Preload LCP, fetchpriority, loading=lazy, defer scripts
+7. **Minification** — CSS et JS minifiés (bootstrap, style, maugallery, scripts)
+8. **Schema.org** — Données structurées LocalBusiness pour rich snippets
+9. **PurgeCSS** — Bootstrap purgé de 160 KiB à 9.9 KiB
+10. **Fonts** — Google Fonts self-hosted en local (élimine latence réseau)
+
+#### Limite restante
+- unused-js : jQuery (~59 KiB) — nécessaire pour mauGallery, ne peut être retiré
