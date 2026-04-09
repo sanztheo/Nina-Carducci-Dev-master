@@ -53,3 +53,39 @@ f51f2e0 - Lighthouse "77,100,100,100" (Perf,Access,BP,SEO)
 - unminified-css : 0 → 100, unminified-javascript : 0 → 100
 - LCP : 5.0s → 4.7s
 - Reste : unused-css (Bootstrap ~153 KiB inutilisé), unused-js (jQuery ~59 KiB)
+
+### Fix 6 — Schema.org LocalBusiness (données structurées)
+433ce39 - Lighthouse "81,100,100,100" (Perf,Access,BP,SEO)
+- Ajout JSON-LD Schema.org LocalBusiness (nom, adresse, tarifs, Instagram)
+- Permet rich snippets Google (Knowledge Panel, résultats enrichis)
+- LCP : 4.4s, FCP : 2.6s, TBT : 0ms, CLS : 0.001
+
+---
+
+### Résumé final
+
+| Métrique | Baseline (38f67db) | Final (433ce39) | Gain |
+|---|---|---|---|
+| Performance | 67 | 81 | +14 |
+| Accessibilité | 87 | 100 | +13 |
+| Best Practices | 96 | 100 | +4 |
+| SEO | 100 | 100 | = |
+| WAVE Errors | 4 | 0 | -4 |
+| WAVE Contrast | 3 | 0 | -3 |
+| WAVE Alerts | 7 | 0 | -7 |
+| LCP | 6.6s | 4.4s | -2.2s |
+
+#### Corrections apportées
+1. **Bug JS** — Navigation lightbox prev/next cassée (index au lieu de index±1)
+2. **Meta SEO** — title, description, Open Graph, lang="fr", charset en premier
+3. **HTML sémantique** — header/main/nav/section/footer, hiérarchie h1>h2>h3, labels form
+4. **Contraste** — Texte blanc sur #BEB45A → noir (ratio 2.12:1 → 13.3:1)
+5. **Images** — width/height explicites + height:auto CSS (CLS, aspect-ratio)
+6. **Performance** — Preload LCP, fetchpriority, loading=lazy, defer scripts
+7. **Minification** — CSS et JS minifiés (bootstrap, style, maugallery, scripts)
+8. **Schema.org** — Données structurées LocalBusiness pour rich snippets
+
+#### Limites (non corrigées)
+- unused-css : Bootstrap complet (~153 KiB inutilisé) — purge risquée sans build tool
+- unused-js : jQuery (~59 KiB) — nécessaire pour mauGallery
+- LCP encore à 4.4s : dépend du poids CSS render-blocking (Bootstrap) et Google Fonts
