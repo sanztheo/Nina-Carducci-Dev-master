@@ -45,8 +45,13 @@ footer {
 	color: #000
 }
 
+.carousel-item img {
+	height: auto;
+}
+
 .social-link img {
 	width: 20px;
+	height: auto;
 }
 
 #about {
@@ -76,7 +81,7 @@ footer {
 
 .picture img {
 	width: 100%;
-
+	height: auto;
 }
 #about-me {
 	flex: 2
