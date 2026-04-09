@@ -20,6 +20,13 @@ body {
 
 .top-header .name {
 	font-size: 26px;
+	margin: 0;
+}
+
+footer {
+	text-align: center;
+	padding: 1em;
+	font-size: 14px;
 }
 
 .nav ul {
@@ -255,7 +262,7 @@ input[type="submit"] {
 		margin-top: 0;
 		margin-bottom: 1em;
 	}
-	#about-me h6, #about-me p {
+	#about-me .about-me__introduction, #about-me p {
 		width: 100%;
 	}
 }
