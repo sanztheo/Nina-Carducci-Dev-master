@@ -418,3 +418,166 @@ input[type="submit"] {
 	}
 }
 
+/* ===== Lightbox galerie : box stable, ESC/backdrop fermable, flèches fixes ===== */
+
+/* Empêche shift viewport quand modal ouvre (Bootstrap retire scrollbar + ajoute padding-right) */
+html {
+	scrollbar-gutter: stable;
+}
+body.modal-open {
+	padding-right: 0 !important;
+	overflow: hidden;
+}
+
+.gallery-lightbox {
+	padding: 0 !important;
+	cursor: zoom-out;
+}
+.gallery-lightbox .modal-dialog {
+	width: 92vw;
+	max-width: 92vw;
+	height: 90vh;
+	max-height: 90vh;
+	margin: 5vh auto;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	pointer-events: auto;
+}
+.gallery-lightbox .modal-content {
+	width: 100%;
+	height: 100%;
+	background: transparent;
+	border: 0;
+	box-shadow: none;
+}
+.gallery-lightbox .modal-body {
+	padding: 0;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: static;
+}
+.gallery-lightbox .lightboxImage {
+	max-width: 100%;
+	max-height: 100%;
+	width: auto;
+	height: auto;
+	object-fit: contain;
+	display: block;
+	margin: 0 auto;
+	border-radius: 4px;
+	box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
+	cursor: default;
+}
+
+.modal-backdrop.show {
+	opacity: 0.85;
+}
+
+.gallery-lightbox .mg-close {
+	position: fixed;
+	top: 20px;
+	right: 24px;
+	width: 44px;
+	height: 44px;
+	padding: 0;
+	background: rgba(255, 255, 255, 0.95);
+	border: 0;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 28px;
+	font-weight: 300;
+	line-height: 1;
+	color: #111;
+	cursor: pointer;
+	z-index: 1070;
+	box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+	transition: transform 0.2s ease, background 0.2s ease;
+}
+.gallery-lightbox .mg-close:hover,
+.gallery-lightbox .mg-close:focus {
+	background: #fff;
+	transform: scale(1.08);
+	outline: none;
+}
+
+.gallery-lightbox .mg-prev,
+.gallery-lightbox .mg-next {
+	position: fixed;
+	top: 50%;
+	transform: translateY(-50%);
+	width: 52px;
+	height: 52px;
+	padding: 0;
+	background: rgba(255, 255, 255, 0.95);
+	border: 0;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 32px;
+	font-weight: 300;
+	line-height: 1;
+	color: #111;
+	cursor: pointer;
+	z-index: 1065;
+	box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+	transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+.gallery-lightbox .mg-prev {
+	left: 24px;
+	right: auto;
+}
+.gallery-lightbox .mg-next {
+	right: 24px;
+	left: auto;
+}
+.gallery-lightbox .mg-prev:hover,
+.gallery-lightbox .mg-next:hover,
+.gallery-lightbox .mg-prev:focus,
+.gallery-lightbox .mg-next:focus {
+	background: #fff;
+	transform: translateY(-50%) scale(1.08);
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+	outline: none;
+}
+.gallery-lightbox .mg-prev > span,
+.gallery-lightbox .mg-next > span {
+	display: block;
+	transform: translateY(-2px);
+}
+
+@media (max-width: 600px) {
+	.gallery-lightbox .modal-dialog {
+		width: 96vw;
+		max-width: 96vw;
+		height: 86vh;
+		max-height: 86vh;
+		margin: 7vh auto;
+	}
+	.gallery-lightbox .mg-prev {
+		left: 8px;
+	}
+	.gallery-lightbox .mg-next {
+		right: 8px;
+	}
+	.gallery-lightbox .mg-prev,
+	.gallery-lightbox .mg-next {
+		width: 44px;
+		height: 44px;
+		font-size: 26px;
+	}
+	.gallery-lightbox .mg-close {
+		top: 12px;
+		right: 12px;
+		width: 38px;
+		height: 38px;
+		font-size: 24px;
+	}
+}
+

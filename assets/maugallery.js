@@ -114,10 +114,14 @@
       }
     },
     openLightBox(element, lightboxId) {
-      $(`#${lightboxId}`)
-        .find(".lightboxImage")
-        .attr("src", element.attr("src"));
-      $(`#${lightboxId}`).modal("toggle");
+      const modalEl = document.getElementById(lightboxId);
+      if (!modalEl) return;
+      modalEl.querySelector(".lightboxImage").setAttribute("src", element.attr("src"));
+      bootstrap.Modal.getOrCreateInstance(modalEl, {
+        keyboard: true,
+        backdrop: true,
+        focus: true
+      }).show();
     },
     prevImage() {
       let activeImage = null;
@@ -194,27 +198,42 @@
       $(".lightboxImage").attr("src", $(next).attr("src"));
     },
     createLightBox(gallery, lightboxId, navigation) {
-      gallery.append(`<div class="modal fade" id="${
-        lightboxId ? lightboxId : "galleryLightbox"
-      }" tabindex="-1" role="dialog" aria-hidden="true">
-                <div class="modal-dialog" role="document">
+      const id = lightboxId ? lightboxId : "galleryLightbox";
+      gallery.append(`<div class="modal fade gallery-lightbox" id="${id}" tabindex="-1" role="dialog" aria-hidden="true" aria-label="Visionneuse d'image">
+                <button type="button" class="mg-close" aria-label="Fermer" data-bs-dismiss="modal">&times;</button>
+                ${
+                  navigation
+                    ? '<button type="button" class="mg-prev" aria-label="Image précédente"><span aria-hidden="true">&#8249;</span></button>'
+                    : ''
+                }
+                ${
+                  navigation
+                    ? '<button type="button" class="mg-next" aria-label="Image suivante"><span aria-hidden="true">&#8250;</span></button>'
+                    : ''
+                }
+                <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-body">
-                            ${
-                              navigation
-                                ? '<div class="mg-prev" style="cursor:pointer;position:absolute;top:50%;left:-15px;background:white;"><</div>'
-                                : '<span style="display:none;" />'
-                            }
                             <img class="lightboxImage img-fluid" alt="Contenu de l'image affichée dans la modale au clique"/>
-                            ${
-                              navigation
-                                ? '<div class="mg-next" style="cursor:pointer;position:absolute;top:50%;right:-15px;background:white;}">></div>'
-                                : '<span style="display:none;" />'
-                            }
                         </div>
                     </div>
                 </div>
             </div>`);
+      const modalEl = document.getElementById(id);
+      if (!modalEl) return;
+      modalEl.addEventListener("click", function(e) {
+        const target = e.target;
+        if (
+          target.classList.contains("lightboxImage") ||
+          target.closest(".mg-prev") ||
+          target.closest(".mg-next") ||
+          target.closest(".mg-close")
+        ) {
+          return;
+        }
+        const instance = bootstrap.Modal.getInstance(modalEl);
+        if (instance) instance.hide();
+      });
     },
     showItemTags(gallery, position, tags) {
       var tagItems =
