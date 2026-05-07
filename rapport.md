@@ -125,3 +125,57 @@ a2da4d1 - Lighthouse "99,100,100,100" (Perf,Access,BP,SEO)
 
 #### Limite restante
 - unused-js : jQuery (~59 KiB) - nécessaire pour mauGallery, ne peut être retiré
+
+---
+
+## Correctifs UX & A11y - 2026-05-07
+
+### Fix 8 - Contraste flèches carousel hero (WAVE)
+5bf6dc4 - Pastille blanche 56px + chevron noir SVG (fill `%23111`)
+- Override Bootstrap `.carousel-control-prev/next` : `border-radius:50%`, `background:#fff`, `opacity:1`
+- Icônes SVG inline : data URI avec `fill='%23111'` (au lieu de `%23fff` Bootstrap)
+- Hover : `scale(1.06)` + ombre renforcée
+- Responsive < 600px : taille réduite à 44px
+- WAVE : 1 contraste résolu sur les contrôles carousel
+
+### Fix 9 - Reconstruction lightbox galerie
+dc6b2b2 - UX modal complète, bugs structurels résolus
+**Problèmes identifiés** :
+1. `$(el).modal("toggle")` (jQuery interface BS5) instable → ESC + clic backdrop ne fermaient pas
+2. Modal-dialog `width:auto` se redimensionnait par image → image et flèches sautaient à chaque navigation
+3. Flèches enfants de `.modal-dialog` (qui reçoit `transform` Bootstrap pendant fade-in) → containing block créé par `transform` capturait les `position:fixed` (spec CSS) → flèches collées au dialog pendant l'animation, snap viewport après
+4. Bootstrap ajoute `padding-right:17px` sur body à l'ouverture (compensation scrollbar) → viewport élargit → flèches `right:24px` shifaient
+5. Inline styles dans markup JS empêchaient overrides CSS propres
+
+**Corrections** :
+- API native `bootstrap.Modal.getOrCreateInstance(el).show()` (au lieu jQuery interface)
+- `.modal-dialog` verrouillé à `92vw × 90vh` fixe → image et UI stables peu importe ratio image
+- `.mg-prev`, `.mg-next`, `.mg-close` hissés direct enfants `.modal` → aucun ancêtre transform → `position:fixed` ancré viewport dès frame 1
+- `html { scrollbar-gutter: stable }` + `body.modal-open { padding-right: 0 !important }` → neutralise shift viewport
+- Listener click custom sur modal : ferme si target ≠ image / flèche / close
+- Bouton fermer `×` ajouté en haut à droite (`data-bs-dismiss="modal"`)
+- Backdrop opacity 0.85 (lisibilité)
+- Markup nettoyé : `<button>` sémantique au lieu `<div>`, plus d'inline styles
+- 4 moyens de fermer : ESC, clic backdrop, clic hors image, bouton ×
+
+### Fix 10 - Filtre galerie : état actif perdu
+0ccbae3 - Classe `active` non réappliquée
+- `filterByTag` retirait `active active-tag` mais ne réajoutait que `active-tag`
+- CSS `.nav-pills .nav-link.active{background:#BEB45A}` jamais touché → fond olive bloqué sur "Tous"
+- Fix : `addClass("active active-tag")` pour symétrie avec `removeClass`
+
+### Fix 11 - Sources non-minifiées en dev
+e0e79cb - `index.html` référence `style.css`, `maugallery.js`, `scripts.js`
+- Lecture/debug en dev impossible sur fichiers minifiés
+- Chaîne minification à relancer avant déploiement prod
+
+#### Synthèse correctifs UX
+| Bug | Cause racine | Correctif |
+|---|---|---|
+| Contraste flèches hero | SVG fill blanc sur fond clair | Pastille blanche + chevron noir |
+| Modal ne se ferme pas (ESC/backdrop) | `.modal("toggle")` jQuery BS5 unreliable | API native `bootstrap.Modal` |
+| Flèches teleport à l'ouverture | `transform` sur ancêtre crée containing block fixed | Flèches hissées hors `.modal-dialog` |
+| Image et flèches sautent à navigation | `modal-dialog` width:auto | Box verrouillée 92vw × 90vh |
+| Shift viewport à l'ouverture modal | Bootstrap `padding-right` body | `scrollbar-gutter:stable` + override |
+| Filtre tags : pas de fond actif | `addClass` asymétrique avec `removeClass` | Re-ajout `active` |
+| Pas de bouton fermer visible | Manque dans markup originel | Bouton × fixed top-right |
