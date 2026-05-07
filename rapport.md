@@ -25,42 +25,37 @@ Site audité avec deux outils standards :
 
 ### Phase 1 — SEO, accessibilité, performance (avril 2026)
 
-#### 1. Bug de navigation dans la galerie photo
+#### 1. Bug de navigation dans la galerie photo — `c816bfb`
 La flèche « suivante » dans la visionneuse d'image renvoyait sur la même image. Corrigé : les flèches naviguent désormais correctement.
 
-#### 2. Référencement Google
+#### 2. Référencement Google — `38f67db`
 Ajout des balises essentielles (titre, description, image de partage Facebook/Twitter, langue française). La page est maintenant correctement comprise par Google et les réseaux sociaux.
 
-#### 3. Structure de la page lisible par les lecteurs d'écran
+#### 3. Structure de la page lisible par les lecteurs d'écran — `4af25c9`
 La page utilisait des balises génériques (`div`) partout. Remplacées par des balises sémantiques (`header`, `main`, `nav`, `section`, `footer`) que les technologies d'assistance (lecteurs d'écran pour personnes malvoyantes) reconnaissent. Hiérarchie des titres (h1, h2, h3) corrigée. Libellés de formulaire associés à leurs champs.
 
-#### 4. Contraste des couleurs
+#### 4. Contraste des couleurs — `f28829c`
 Le texte blanc sur fond olive ne respectait pas les normes d'accessibilité (WCAG AA). Passé en noir : ratio de contraste passé de 2,1:1 à 13,3:1, bien au-dessus du seuil requis (4,5:1).
 
-#### 5. Dimensions des images
+#### 5. Dimensions des images — `905d34c`
 Les images n'avaient pas de dimensions déclarées dans le code, ce qui faisait sauter la mise en page pendant le chargement. Dimensions ajoutées : la page se stabilise immédiatement.
 
 #### 6. Vitesse de chargement
-- **Préchargement** de l'image principale du carousel (la première vue)
-- **Chargement différé** des images plus bas dans la page (chargées seulement quand l'utilisateur défile)
-- **Compression** des fichiers de style et de script (CSS et JavaScript réduits à l'essentiel)
-- **Polices d'écriture** hébergées localement plutôt que chargées depuis Google (élimine 3 connexions réseau externes)
-- **Bibliothèque Bootstrap** allégée : passée de 160 Ko à 10 Ko en supprimant le code inutilisé
+- **Préchargement** de l'image principale du carousel + **chargement différé** des images plus bas + favicon (erreur 404 résolue) — `f51f2e0`
+- **Compression** des fichiers CSS et JavaScript — `1f4f4a3`
+- **Polices** hébergées localement (Inter + Spectral) + **Bootstrap** allégé de 160 Ko à 10 Ko — `a2da4d1`
 
-#### 7. Présence Google enrichie
+#### 7. Présence Google enrichie — `433ce39`
 Ajout de données structurées (Schema.org) qui permettent à Google d'afficher la fiche entreprise de Nina Carducci dans ses résultats : adresse, tarifs, lien Instagram, type d'activité (photographe locale à Bordeaux).
-
-#### 8. Favicon
-Erreur 404 dans la console résolue.
 
 ---
 
 ### Phase 2 — Corrections UX et accessibilité (mai 2026)
 
-#### 9. Flèches du carousel d'accueil illisibles
+#### 8. Flèches du carousel d'accueil illisibles — `5bf6dc4`
 Les flèches « précédent / suivant » du grand carousel d'accueil étaient blanches sur fond clair → invisibles, signalées par WAVE. Remplacées par des **boutons ronds blancs avec une flèche noire** au centre, ombrés. Lisibles et élégantes.
 
-#### 10. Visionneuse d'image (lightbox) repensée entièrement
+#### 9. Visionneuse d'image (lightbox) repensée entièrement — `dc6b2b2`
 Plusieurs problèmes corrigés en une fois :
 
 - **Touche Échap (ESC) ne fermait pas la fenêtre** → corrigé
@@ -71,8 +66,11 @@ Plusieurs problèmes corrigés en une fois :
 
 Au final, **4 façons de fermer** la fenêtre image : touche Échap, clic sur le fond noir, clic hors de l'image, bouton ×.
 
-#### 11. Filtre des catégories de photos
+#### 10. Filtre des catégories de photos — `0ccbae3`
 Le menu « Tous / Concert / Entreprises / Mariages / Portrait » ne mettait pas en surbrillance la catégorie sélectionnée — elle restait toujours sur « Tous ». Corrigé : la catégorie active est désormais bien marquée en olive.
+
+#### 11. Sources non-minifiées en développement — `e0e79cb`
+Bascule des fichiers CSS/JS vers leurs versions lisibles pour faciliter la maintenance. La compression sera relancée avant déploiement en production.
 
 ---
 
